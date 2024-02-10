@@ -1,0 +1,140 @@
+Company Router Configuration
+
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Company_Router
+!
+no logging console
+!
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+ip dhcp excluded-address 192.168.0.1 192.168.0.11
+ip dhcp excluded-address 192.168.0.34 192.168.0.44
+ip dhcp excluded-address 192.168.0.66 192.168.0.76
+ip dhcp excluded-address 192.168.0.98 192.168.0.108
+!
+ip dhcp pool VLAN10
+network 192.168.0.0 255.255.255.224
+default-router 192.168.0.1
+dns-server 192.168.0.67
+domain-name example.com
+ip dhcp pool VLAN20
+network 192.168.0.32 255.255.255.224
+default-router 192.168.0.33
+dns-server 192.168.0.67
+domain-name example.com
+ip dhcp pool VLAN30
+network 192.168.0.64 255.255.255.224
+default-router 192.168.0.65
+dns-server 192.168.0.67
+domain-name example.com
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO1941/K9 sn FTX15240LOO-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+description Link to FirstFlrSwitch
+no ip address
+duplex auto
+speed auto
+!
+interface GigabitEthernet0/0.10
+description SubInterface for VLAN 10
+encapsulation dot1Q 10
+ip address 192.168.0.1 255.255.255.224
+ip helper-address 192.168.0.67
+!
+interface GigabitEthernet0/0.20
+description SubInterface for VLAN 20
+encapsulation dot1Q 20
+ip address 192.168.0.33 255.255.255.224
+ip helper-address 192.168.0.67
+!
+interface GigabitEthernet0/0.30
+description SubInterface for VLAN 30
+encapsulation dot1Q 30
+ip address 192.168.0.65 255.255.255.224
+ip helper-address 192.168.0.67
+!
+interface GigabitEthernet0/0.99
+description SubInterface for VLAN 99
+encapsulation dot1Q 99
+ip address 192.168.0.97 255.255.255.224
+!
+interface GigabitEthernet0/1
+no ip address
+duplex auto
+speed auto
+shutdown
+!
+interface Serial0/0/0
+description Serial Link to RemoteSiteRouter
+ip address 10.10.0.1 255.255.255.0
+clock rate 2000000
+!
+interface Serial0/0/1
+no ip address
+clock rate 2000000
+!
+interface Vlan1
+no ip address
+shutdown
+!
+ip classless
+ip route 128.10.0.0 255.255.0.0 10.10.0.2 
+ip route 129.10.0.0 255.255.0.0 10.10.0.2 
+!
+ip flow-export version 9
+!
+!
+!
+no cdp run
+!
+banner motd ^CUNAUTHORIZED ACCESS IS PROHIBITED!!^C
+!
+!
+!
+!
+logging 192.168.0.67
+line con 0
+password 7 0822455D0A16
+login
+!
+line aux 0
+!
+line vty 0 4
+password 7 0822455D0A16
+login
+!
+!
+!
+end
